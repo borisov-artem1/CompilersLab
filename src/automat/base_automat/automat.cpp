@@ -14,7 +14,7 @@ namespace automat {
 		}
 	}
 
-	automat baseAutomat::createBaseAutomat(const char symbol) { // TODO: must fix bugs with shared pointers
+	automat baseAutomat::createBaseAutomat(const char symbol) {
 		if (symbol == '\0' || std::iscntrl(symbol))
 		{
 			throw std::invalid_argument("Invalid symbol");

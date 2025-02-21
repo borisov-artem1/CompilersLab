@@ -10,21 +10,6 @@
 
 
 
-struct NFA
-{   //    Q           Sigma
-    // 0 .. n - 1, 0 .. c - 1
-
-    int start;
-    std::vector<bool> t;
-    std::vector<std::vector<std::set<int>>> transitionsFunc;
-
-};
-
-class ThompsonAlgorithm
-{
-
-};
-
 int main() {
 
     using namespace prep;
