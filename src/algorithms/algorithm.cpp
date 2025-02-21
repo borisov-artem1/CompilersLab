@@ -1,5 +1,5 @@
 #include <stack>
-#include "NFA.h"
+#include "../automat/NFA/NFA.h"
 #include "algorithm.h"
 
 
@@ -17,9 +17,9 @@ namespace automat
                 nfaStack.push(nfa.createBaseAutomat(postfix));
             } else if (postfix == '.')
             {
-                automat firstAutomat = nfaStack.top();
-                nfaStack.pop();
                 automat secondAutomat = nfaStack.top();
+                nfaStack.pop();
+                automat firstAutomat = nfaStack.top();
                 nfaStack.pop();
                 nfaStack.push(nfa.baseConcat(firstAutomat, secondAutomat));
             } else if (postfix == '*')
@@ -29,9 +29,9 @@ namespace automat
                 nfaStack.push(nfa.baseKleene(Automat));
             } else if (postfix == '|')
             {
-                automat firstAutomat = nfaStack.top();
-                nfaStack.pop();
                 automat secondAutomat = nfaStack.top();
+                nfaStack.pop();
+                automat firstAutomat = nfaStack.top();
                 nfaStack.pop();
                 nfaStack.push(nfa.baseAlternate(firstAutomat, secondAutomat));
             }
@@ -41,13 +41,27 @@ namespace automat
 
     void algForAuto::printNFA(State* state, std::set<int>& visited) const
     {
-        if (visited.find(state->id) != visited.end()) { return; }
+        if (visited.contains(state->id)) { return; }
         visited.insert(state->id);
 
         for (const auto& [symbol, nextState] : state->transitions)
         {
-            std::cout << "State " << state->id << " --(" << (symbol == '\0' ? "ε" : std::string(1, symbol)) << ")--> State " << nextState->id << std::endl;
-            printNFA(state, visited);
+            std::cout << "State " << state->id << " --(" << (symbol == '\0' ? "e" : std::string(1, symbol)) << ")--> State " << nextState->id << std::endl;
+            printNFA(nextState, visited);
         }
     }
+
+    automat algForAuto::buildDFAfromNFA(const automat& NFA)
+    {
+
+    }
+
+    void algForAuto::printDFA(const automat& DFA) const
+    {
+
+    }
+
+
+
+
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "automat.h"
+#include "../base_automat/automat.h"
 namespace automat {
 
 

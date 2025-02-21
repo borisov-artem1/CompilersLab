@@ -3,9 +3,9 @@
 #include <vector>
 #include <set>
 
-#include "algorithm.h"
-#include "preprocessing.h"
-#include "automat.h"
+#include "../algorithms/algorithm.h"
+#include "../prep/preprocessing.h"
+#include "../automat/base_automat/automat.h"
 
 
 

@@ -31,7 +31,7 @@ namespace automat {
         virtual automat baseAlternate(const automat& firsAutomat, const automat& secondAutomat) = 0;
 
     protected:
-        State* startState;
-        State* finalState;
+        State* start;
+        State* accept;
     };
 }

@@ -1,7 +1,7 @@
 #include "automat.h"
 
 namespace automat {
-	baseAutomat::baseAutomat(State* start, State* end) : startState(start), finalState(end) {}
+	baseAutomat::baseAutomat(State* start, State* end) : start(start), accept(end) {}
 
 	State* baseAutomat::createState() {
 		try
@@ -19,19 +19,10 @@ namespace automat {
 		{
 			throw std::invalid_argument("Invalid symbol");
 		}
-		std::unique_ptr<State> start, accept;
+		start = createState();
+		accept = createState();
 
-		try
-		{
-			start.reset(this->createState());
-			accept.reset(this->createState());
-		} catch (const std::bad_alloc& e)
-		{
-			std::cout << "Error, bad alloc in function createBaseAutomat: " << e.what() << std::endl;
-			throw;
-		}
-
-		start->transitions.insert({symbol, accept.get()});
-		return {start.get(), accept.get()};
+		start->transitions.insert({symbol, accept});
+		return {start, accept};
 	}
 }
