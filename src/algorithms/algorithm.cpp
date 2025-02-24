@@ -34,6 +34,9 @@ namespace automat
                 automat firstAutomat = nfaStack.top();
                 nfaStack.pop();
                 nfaStack.push(nfa.baseAlternate(firstAutomat, secondAutomat));
+            } else if (postfix == '+')
+            {
+
             }
         }
         return nfaStack.top();
@@ -53,7 +56,6 @@ namespace automat
 
     automat algForAuto::buildDFAfromNFA(const automat& NFA)
     {
-
     }
 
     void algForAuto::printDFA(const automat& DFA) const

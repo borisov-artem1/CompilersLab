@@ -5,7 +5,7 @@
 namespace prep
 {
     const std::string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const std::string manageLetters = "().*|+[]";
+    const std::string manageLetters = "().*|+";
     class [[nodiscard]] preprocessing {
         std::string baseString;
         std::string finalPostfixString;
@@ -14,8 +14,9 @@ namespace prep
         const std::string& normalizeString();
         ~preprocessing() = default;
     private:
-        [[nodiscard]] std::string toPostString(const std::string& regexString) noexcept;
+        [[nodiscard]] std::string toPostString(std::string& regexString) noexcept;
         [[nodiscard]] int precedence(const char& manageToken) noexcept;
+        static void replacementPlus(std::string& baseString) noexcept;
     };
 }
 

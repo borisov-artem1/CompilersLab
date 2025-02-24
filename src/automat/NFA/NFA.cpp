@@ -7,7 +7,7 @@ namespace automat
     {
         return baseAutomat::createState();
     }
-    automat NFA::createBaseAutomat(const char symbol) // TODO: maybe bug in there
+    automat NFA::createBaseAutomat(const char symbol)
     {
         try
         {
@@ -48,6 +48,17 @@ namespace automat
         firsAutomat.accept->transitions.insert({'\0', firsAutomat.start});
         return {start, accept};
     }
+
+    bool NFA::acceptString(const automat& Automat, const std::string& baseString)
+    {
+    }
+
+    std::set<State*> NFA::getEpsilonClojure(State* state)
+    {
+
+    }
+
+
 
 
 }

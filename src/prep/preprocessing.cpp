@@ -21,10 +21,12 @@ int prep::preprocessing::precedence(const char& manageToken) noexcept
 }
 
 
-std::string prep::preprocessing::toPostString(const std::string& regexString) noexcept
+std::string prep::preprocessing::toPostString(std::string& regexString) noexcept
 {
     std::stack<char> tokenStack;
     std::string outputString;
+    replacementPlus(regexString);
+    //std::cout << regexString << std::endl;
     for (const auto & currentChar : regexString)
     {
         if (std::isalnum(currentChar))
@@ -57,6 +59,7 @@ std::string prep::preprocessing::toPostString(const std::string& regexString) no
         outputString += tokenStack.top();
         tokenStack.pop();
     }
+    //std::cout << outputString << std::endl;
     return outputString;
 }
 
@@ -70,5 +73,15 @@ const std::string& prep::preprocessing::normalizeString()
     return finalPostfixString;
 }
 
+void prep::preprocessing::replacementPlus(std::string& baseString) noexcept
+{
+    size_t pos = 0;
+    while ((pos = baseString.find('+')) != std::string::npos)
+    {
+        std::string replacement = "." + baseString.substr(pos - 1, pos) + "*";
+        baseString.replace(pos, 1, replacement);
+        pos += 3;
+    }
+}
 
 
