@@ -30,7 +30,7 @@ namespace automat {
         virtual automat baseKleene(const automat& Automat) = 0;
         virtual automat baseAlternate(const automat& firsAutomat, const automat& secondAutomat) = 0;
         virtual bool acceptString(const automat& Automat, const std::string& baseString) = 0;
-        virtual std::set<State*> getEpsilonClojure(State* state);
+        virtual void getEpsilonClojure(State* state, std::set<State*>& visitor) = 0;
 
     protected:
         State* start;

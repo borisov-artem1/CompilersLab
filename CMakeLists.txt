@@ -3,6 +3,9 @@ project(testProject)
 
 set(CMAKE_CXX_STANDARD 20)
 
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
 add_executable(testProject
         src/cmd/main.cpp
         src/prep/preprocessing.cpp
@@ -16,4 +19,10 @@ add_executable(testProject
         src/algorithms/algorithm.cpp
         src/algorithms/algorithm.h
         src/visualization/visualizer.cpp
-        src/visualization/visualizer.h)
+        src/visualization/visualizer.h
+        src/tests/NFA_tests.cpp)
+
+target_link_libraries(testProject
+        ${GTEST_LIBRARIES}
+        pthread
+)

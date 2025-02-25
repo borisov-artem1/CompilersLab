@@ -51,14 +51,46 @@ namespace automat
 
     bool NFA::acceptString(const automat& Automat, const std::string& baseString)
     {
+        std::set<State*> currentStates;
+        getEpsilonClojure(Automat.start, currentStates);
+
+        for (const auto& c : baseString)
+        {
+            std::set<State*> nextStates;
+            for (State* s : currentStates)
+            {
+                for (auto& [symbol, nextState] : s->transitions)
+                {
+                    if (symbol == c)
+                    {
+                        nextStates.insert(nextState);
+                    }
+                }
+            }
+
+            std::set<State*> epsilonExpanded;
+            for (State* s : nextStates)
+            {
+                getEpsilonClojure(s, epsilonExpanded);
+            }
+            currentStates = epsilonExpanded;
+        }
+        return currentStates.contains(Automat.accept);
     }
 
-    std::set<State*> NFA::getEpsilonClojure(State* state)
+    void NFA::getEpsilonClojure(State* state, std::set<State*>& visitor)
     {
+        if (visitor.contains(state)) { return; }
+        visitor.insert(state);
 
+        for (const auto& [symbol, nextState] : state->transitions)
+        {
+            if (symbol == '\0')
+            {
+                getEpsilonClojure(nextState, visitor);
+            }
+        }
     }
-
-
 
 
 }

@@ -2,12 +2,15 @@
 #include "../automat/NFA/NFA.h"
 #include "algorithm.h"
 
+#include "../prep/preprocessing.h"
 
 
 namespace automat
 {
-    automat algForAuto::buildNFAfromPostfixString(const std::string& postfixString)
+    automat algForAuto::buildNFAfromPostfixString(std::string& baseString)
     {
+        prep::preprocessing regSeq(baseString);
+        std::string postfixString = regSeq.normalizeString();
         std::stack<automat> nfaStack;
         NFA nfa;
         for (const auto& postfix : postfixString)
@@ -34,9 +37,6 @@ namespace automat
                 automat firstAutomat = nfaStack.top();
                 nfaStack.pop();
                 nfaStack.push(nfa.baseAlternate(firstAutomat, secondAutomat));
-            } else if (postfix == '+')
-            {
-
             }
         }
         return nfaStack.top();

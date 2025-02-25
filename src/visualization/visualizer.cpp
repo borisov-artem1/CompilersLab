@@ -14,7 +14,7 @@ namespace automat
             throw std::runtime_error("Could not open file " + filename);
         }
 
-        file << "digraph Automaton {\n";
+        file << "digraph Automat {\n";
         file << "   rankdir=LR;\n";
         file << "node [shape=circle];\n";
 
