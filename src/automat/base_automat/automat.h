@@ -11,12 +11,15 @@ namespace automat {
     {
         int id = 0;
         std::set<std::pair<char, State*>> transitions;
+        bool isAccept = false;
     };
 
     struct automat
     {
         State* start;
         State* accept;
+        void deleteStates(State* state, std::set<State*>& visited);
+        void clearAuto();
     };
 
     class baseAutomat {
@@ -31,6 +34,7 @@ namespace automat {
         virtual automat baseAlternate(const automat& firsAutomat, const automat& secondAutomat) = 0;
         virtual bool acceptString(const automat& Automat, const std::string& baseString) = 0;
         virtual void getEpsilonClojure(State* state, std::set<State*>& visitor) = 0;
+
 
     protected:
         State* start;

@@ -2,7 +2,11 @@
 #include "../automat/NFA/NFA.h"
 #include "algorithm.h"
 
+#include <queue>
+
+#include "../automat/DFA/DFA.h"
 #include "../prep/preprocessing.h"
+#include "../visualization/visualizer.h"
 
 
 namespace automat
@@ -39,6 +43,7 @@ namespace automat
                 nfaStack.push(nfa.baseAlternate(firstAutomat, secondAutomat));
             }
         }
+        visualizer::exportToDot(nfaStack.top().start, nfaStack.top().accept,"NFA");
         return nfaStack.top();
     }
 
@@ -54,16 +59,113 @@ namespace automat
         }
     }
 
-    automat algForAuto::buildDFAfromNFA(const automat& NFA)
+    DFA algForAuto::buildDFAfromNFA(automat& NFA)
     {
+        DFA dfa;
+        std::queue<std::set<State*>> dfaQueue;
+        std::map<std::set<State*>, State*> dfaStates;
+        int stateCount = 0;
+
+        const std::set<State*> startClosure = epsilonClosure({NFA.start});
+        auto startState = new State{stateCount++, {}, false};
+        dfaStates[startClosure] = startState;
+        dfa.start = startState;
+        dfa.states.push_back(startState);
+        dfaQueue.push(startClosure);
+
+        while (!dfaQueue.empty())
+        {
+            std::set<State*> currentClosure = dfaQueue.front();
+            dfaQueue.pop();
+            State* dfaState = dfaStates[currentClosure];
+
+            for (const auto& state : currentClosure)
+            {
+                if (state == NFA.accept)
+                {
+                    dfaState->isAccept = true;
+                    break;
+                }
+            }
+
+            std::map<char, std::set<State*>> moveTable;
+            for (const auto& state : currentClosure)
+            {
+                for (const auto& [symbol, nextState] : state->transitions)
+                {
+                    if (symbol != '\0')
+                    {
+                        moveTable[symbol].insert(nextState);
+                    }
+                }
+            }
+
+            for (const auto& [symbol, nextState] : moveTable)
+            {
+                std::set<State*> curSetClos = epsilonClosure(nextState);
+                if (!dfaStates.contains(curSetClos))
+                {
+                    State* newState = new State{stateCount++, {}, false};
+                    dfaStates[curSetClos] = newState;
+                    dfa.states.push_back(newState);
+                    dfaQueue.push(curSetClos);
+                }
+                dfaState->transitions.insert({symbol, dfaStates[curSetClos]});
+            }
+        }
+
+        visualizer::exportToDot(dfa.start, nullptr, "DFA");
+        return dfa;
+
     }
 
-    void algForAuto::printDFA(const automat& DFA) const
+    std::set<State*> algForAuto::epsilonClosure(std::set<State*> states)
     {
+        std::set<State*> closure = states;
+        std::queue<State*> visited;
 
+        for (const auto& state : states)
+        {
+            visited.push(state);
+        }
+
+        while (!visited.empty())
+        {
+            State* currentState = visited.front();
+            visited.pop();
+            for (const auto& [symbol, nextState] : currentState->transitions)
+            {
+                if (symbol == '\0' && !closure.contains(nextState))
+                {
+                    closure.insert(nextState);
+                    visited.push(nextState);
+                }
+            }
+        }
+        return closure;
     }
 
+    bool algForAuto::acceptStringForDFA(State* state, const std::string& baseString)
+    {
+        std::set<State*> visited;
+        State* currentState = state;
+        for (const auto& c : baseString)
+        {
+            for (const auto& [symbol, nextState] : currentState->transitions)
+            {
+                if (c == symbol)
+                {
+                    currentState = nextState;
+                    break;
+                } else
+                {
+                    return false;
+                }
+            }
+        }
 
+        return currentState->isAccept;
+    }
 
 
 }
