@@ -24,10 +24,13 @@ namespace automat
     {
         start = createState();
         accept = createState();
+        accept->isAccept = true;
         start->transitions.insert({'\0', firsAutomat.start});
         start->transitions.insert({'\0', secondAutomat.start});
         firsAutomat.accept->transitions.insert({'\0', accept});
         secondAutomat.accept->transitions.insert({'\0', accept});
+        firsAutomat.accept->isAccept = false;
+        secondAutomat.accept->isAccept = false;
         return {start, accept};
 
     }
@@ -35,6 +38,8 @@ namespace automat
     automat NFA::baseConcat(const automat& firsAutomat, const automat& secondAutomat)
     {
         firsAutomat.accept->transitions.insert({'\0', secondAutomat.start});
+        firsAutomat.accept->isAccept = false;
+        secondAutomat.accept->isAccept = true;
         return {firsAutomat.start, secondAutomat.accept};
     }
 
@@ -42,10 +47,12 @@ namespace automat
     {
         start = createState();
         accept = createState();
+        accept->isAccept = true;
         start->transitions.insert({'\0', firsAutomat.start});
         start->transitions.insert({'\0', accept});
         firsAutomat.accept->transitions.insert({'\0', accept});
         firsAutomat.accept->transitions.insert({'\0', firsAutomat.start});
+        firsAutomat.accept->isAccept = false;
         return {start, accept};
     }
 

@@ -79,7 +79,7 @@ namespace automat
             dfaQueue.pop();
             State* dfaState = dfaStates[currentClosure];
 
-            for (const auto& state : currentClosure)
+            for (const auto state : currentClosure)
             {
                 if (state == NFA.accept)
                 {
@@ -89,7 +89,7 @@ namespace automat
             }
 
             std::map<char, std::set<State*>> moveTable;
-            for (const auto& state : currentClosure)
+            for (const auto state : currentClosure)
             {
                 for (const auto& [symbol, nextState] : state->transitions)
                 {
@@ -147,20 +147,20 @@ namespace automat
 
     bool algForAuto::acceptStringForDFA(State* state, const std::string& baseString)
     {
-        std::set<State*> visited;
         State* currentState = state;
         for (const auto& c : baseString)
         {
+            std::map<char, State*> moveTable;
             for (const auto& [symbol, nextState] : currentState->transitions)
             {
-                if (c == symbol)
-                {
-                    currentState = nextState;
-                    break;
-                } else
-                {
-                    return false;
-                }
+                moveTable[symbol] = nextState;
+            }
+            if (moveTable.contains(c))
+            {
+                currentState = moveTable[c];
+            } else
+            {
+                return false;
             }
         }
 

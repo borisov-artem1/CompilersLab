@@ -59,14 +59,15 @@ namespace automat
             if (visited.contains(state)) { return; }
             visited.insert(state);
 
+            if (filename == "DFA" && state->isAccept)
+            {
+                file << "    " << state->id << " [shape=doublecircle];\n";
+            }
+
             for (const auto& [symbol, nextState] : state->transitions)
             {
                 file << "    " << state->id << " -> " << nextState->id
                 << " [label=\"" << (symbol == '\0' ? "eps" : std::string(1, symbol)) << "\"];\n";
-                if (filename == "DFA" && state->isAccept)
-                {
-                    file << "    " << state->id << " [shape=doublecircle];\n";
-                }
                 graph(nextState);
             }
         };

@@ -23,6 +23,7 @@ namespace automat {
 		}
 		start = createState();
 		accept = createState();
+		accept->isAccept = true;
 
 		start->transitions.insert({symbol, accept});
 		return {start, accept};
