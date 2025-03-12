@@ -168,4 +168,175 @@ namespace automat
     }
 
 
+    std::string algForAuto::formingAlphabet(const std::string& baseString)
+    {
+        std::string alphabet;
+        for (const char symbol : baseString)
+        {
+            if (alphabet.find(symbol) == std::string::npos && std::isalnum(symbol))
+            {
+                alphabet += symbol;
+            }
+        }
+        return alphabet;
+    }
+
+
+    DFA algForAuto::minimizationDFA(const DFA& dfa, const std::string& baseString)
+    {
+        std::set<State*> finalStates, nonFinalStates;
+
+        for (State* s: dfa.states)
+        {
+            if (s->isAccept)
+            {
+                finalStates.insert(s);
+            } else
+            {
+                nonFinalStates.insert(s);
+            }
+        }
+
+        std::set<std::set<State*>> P;
+        if (nonFinalStates.empty())
+        {
+            P = {finalStates};
+        } else
+        {
+            P = {finalStates, nonFinalStates};
+        }
+        std::queue<std::set<State*>> W;
+        W.push(finalStates);
+
+
+        std::string alphabet = formingAlphabet(baseString);
+
+        while (!W.empty())
+        {
+            std::set<State*> classToSplit = W.front();
+            W.pop();
+
+            for (const char& symbol : alphabet)
+            {
+                std::set<State*> affectingStates;
+
+                for (State* s : dfa.states) // Maybe wrong
+                {
+                    for (const auto [transitionSymbol, nextState] : s->transitions)
+                    {
+                        if (symbol == transitionSymbol && classToSplit.contains(nextState))
+                        {
+                            affectingStates.insert(s);
+                        }
+                    }
+                }
+
+                for (const auto& subset : P)
+                {
+                    std::set<State*> intersection, difference;
+
+                    for (State* s : subset)
+                    {
+                        if (affectingStates.contains(s))
+                        {
+                            intersection.insert(s);
+                        } else
+                        {
+                            difference.insert(s);
+                        }
+                    }
+
+                    if (!intersection.empty() && !difference.empty())
+                    {
+                        P.erase(subset);
+                        P.insert(intersection);
+                        P.insert(difference);
+
+                        std::queue<std::set<State*>> Q;
+                        bool found = false;
+
+                        while (!W.empty())
+                        {
+                            auto curr = W.front();
+                            W.pop();
+                            if (curr == subset)
+                            {
+                                found = true;
+                            } else
+                            {
+                                Q.push(curr);
+                            }
+                        }
+
+                        if (found)
+                        {
+                            Q.push(intersection);
+                            Q.push(difference);
+                        } else
+                        {
+                            Q.push(intersection.size() <= difference.size() ? difference : intersection);
+                        }
+                        W = std::move(Q);
+                        break;
+                    }
+                }
+            }
+        }
+
+        DFA minDFA;
+        std::map<std::set<State*>, State*> newStates;
+        int idCounter = 0;
+
+
+        for (const auto& subset : P)
+        {
+            auto newState = new State{idCounter++, {}, false};
+            newStates[subset] = newState;
+            minDFA.states.push_back(newState);
+
+            for (State* oldState : subset)
+            {
+                if (oldState->isAccept)
+                {
+                    newState->isAccept = true;
+                    break;
+                }
+            }
+        }
+
+        for (const auto& [oldSet, newSet] : newStates)
+        {
+            for (State* repr = *oldSet.begin(); auto [symbol, targetState] : repr->transitions)
+            {
+                for (const auto& [subset, newTargetSet] : newStates)
+                {
+                    if (subset.contains(targetState))
+                    {
+                        newSet->transitions.insert({symbol, newTargetSet});
+                        break;
+                    }
+                }
+            }
+        }
+
+        for (const auto& [oldSet, newSet] : newStates)
+        {
+            for (State* s : oldSet)
+            {
+                if (s == dfa.start)
+                {
+                    minDFA.start = newStates[oldSet];
+                }
+            }
+        }
+        //minDFA.start = newStates[{dfa.start}];
+        visualizer::exportToDot(minDFA.start, nullptr, "MinDFA");
+        return minDFA;
+
+    }
+
+
+
+
+
 }
