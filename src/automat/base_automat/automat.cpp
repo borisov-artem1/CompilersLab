@@ -5,7 +5,7 @@
 namespace automat {
 	baseAutomat::baseAutomat(State* start, State* end) : start(start), accept(end) {}
 
-	State* baseAutomat::createState() {
+	State* baseAutomat::createState(int& counter) {
 		try
 		{
 			return new State{counter++, {}};
@@ -16,13 +16,13 @@ namespace automat {
 		}
 	}
 
-	automat baseAutomat::createBaseAutomat(const char symbol) {
+	automat baseAutomat::createBaseAutomat(const char symbol, int& counter) {
 		if (symbol == '\0' || std::iscntrl(symbol))
 		{
 			throw std::invalid_argument("Invalid symbol");
 		}
-		start = createState();
-		accept = createState();
+		start = createState(counter);
+		accept = createState(counter);
 		accept->isAccept = true;
 
 		start->transitions.insert({symbol, accept});

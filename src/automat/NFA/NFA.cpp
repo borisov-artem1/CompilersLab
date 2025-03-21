@@ -3,15 +3,15 @@
 
 namespace automat
 {
-    State* NFA::createState()
+    State* NFA::createState(int& counter)
     {
-        return baseAutomat::createState();
+        return baseAutomat::createState(counter);
     }
-    automat NFA::createBaseAutomat(const char symbol)
+    automat NFA::createBaseAutomat(const char symbol, int& counter)
     {
         try
         {
-            const automat a = baseAutomat::createBaseAutomat(symbol);
+            const automat a = baseAutomat::createBaseAutomat(symbol, counter);
             return a;
         } catch(const std::exception& e)
         {
@@ -20,10 +20,10 @@ namespace automat
         }
     }
 
-    automat NFA::baseAlternate(const automat& firsAutomat, const automat& secondAutomat)
+    automat NFA::baseAlternate(const automat& firsAutomat, const automat& secondAutomat, int& counter)
     {
-        start = createState();
-        accept = createState();
+        start = createState(counter);
+        accept = createState(counter);
         accept->isAccept = true;
         start->transitions.insert({'\0', firsAutomat.start});
         start->transitions.insert({'\0', secondAutomat.start});
@@ -43,10 +43,10 @@ namespace automat
         return {firsAutomat.start, secondAutomat.accept};
     }
 
-    automat NFA::baseKleene(const automat& firsAutomat)
+    automat NFA::baseKleene(const automat& firsAutomat, int& counter)
     {
-        start = createState();
-        accept = createState();
+        start = createState(counter);
+        accept = createState(counter);
         accept->isAccept = true;
         start->transitions.insert({'\0', firsAutomat.start});
         start->transitions.insert({'\0', accept});

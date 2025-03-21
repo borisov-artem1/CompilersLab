@@ -16,12 +16,13 @@ namespace automat
         prep::preprocessing regSeq(baseString);
         std::string postfixString = regSeq.normalizeString();
         std::stack<automat> nfaStack;
+        int stateCounter = 0;
         NFA nfa;
         for (const auto& postfix : postfixString)
         {
             if (std::isalnum(postfix))
             {
-                nfaStack.push(nfa.createBaseAutomat(postfix));
+                nfaStack.push(nfa.createBaseAutomat(postfix, stateCounter));
             } else if (postfix == '.')
             {
                 automat secondAutomat = nfaStack.top();
@@ -33,14 +34,14 @@ namespace automat
             {
                 automat Automat = nfaStack.top();
                 nfaStack.pop();
-                nfaStack.push(nfa.baseKleene(Automat));
+                nfaStack.push(nfa.baseKleene(Automat, stateCounter));
             } else if (postfix == '|')
             {
                 automat secondAutomat = nfaStack.top();
                 nfaStack.pop();
                 automat firstAutomat = nfaStack.top();
                 nfaStack.pop();
-                nfaStack.push(nfa.baseAlternate(firstAutomat, secondAutomat));
+                nfaStack.push(nfa.baseAlternate(firstAutomat, secondAutomat, stateCounter));
             }
         }
         visualizer::exportToDot(nfaStack.top().start, nfaStack.top().accept,"NFA");
