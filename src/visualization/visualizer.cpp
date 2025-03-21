@@ -19,10 +19,14 @@ namespace automat
         } else if (filename == "MinDFA")
         {
             pathToDir = "../src/visualization/MinDFA_images";
+        } else if (filename == "DFA_from_rgx")
+        {
+            pathToDir = "../src/visualization/DFA_from_rgx";
         }
         static int counterForNFA = 0;
         static int counterForDFA = 0;
         static int counterForMinDFA = 0;
+        static int counterForDFAFromRGX = 0;
         if (!std::filesystem::exists(pathToDir))
         {
             std::filesystem::create_directory(pathToDir);
@@ -42,6 +46,10 @@ namespace automat
         {
             dotPath = pathToDir + "/" + filename + std::to_string(counterForMinDFA) + ".dot";
             pngPath = pathToDir + "/" + filename + std::to_string(counterForMinDFA) + ".png";
+        } else if (filename == "DFA_from_rgx")
+        {
+            dotPath = pathToDir + "/" + filename + std::to_string(counterForDFAFromRGX) + ".dot";
+            pngPath = pathToDir + "/" + filename + std::to_string(counterForDFAFromRGX) + ".png";
         }
 
         std::ofstream file(dotPath);
@@ -64,7 +72,7 @@ namespace automat
             if (visited.contains(state)) { return; }
             visited.insert(state);
 
-            if ((filename == "DFA" || filename == "MinDFA") && state->isAccept)
+            if ((filename == "DFA" || filename == "MinDFA" || filename == "DFA_from_rgx") && state->isAccept)
             {
                 file << "    " << state->id << " [shape=doublecircle];\n";
             }
@@ -100,6 +108,9 @@ namespace automat
         } else if (filename == "MinDFA")
         {
             counterForMinDFA++;
+        } else if (filename == "DFA_from_rgx")
+        {
+            counterForDFAFromRGX++;
         }
     }
 

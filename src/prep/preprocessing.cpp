@@ -168,7 +168,7 @@ std::string prep::preprocessing::makeConcatenation(const std::string& regex) noe
             if ((isalnum(current) || current == ')' || current == '*' || current == '+') &&
                 (isalnum(next) || next == '(')) {
                 normalized += '.';
-                }
+            }
         }
     }
 

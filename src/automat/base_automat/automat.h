@@ -14,6 +14,12 @@ namespace automat {
         bool isAccept = false;
     };
 
+    struct DFA
+    {
+        State* start;
+        std::vector<State*> states;
+    };
+
     struct automat
     {
         State* start;

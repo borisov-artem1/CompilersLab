@@ -220,7 +220,7 @@ namespace automat
             {
                 std::set<State*> affectingStates;
 
-                for (State* s : dfa.states) // Maybe wrong
+                for (State* s : dfa.states)
                 {
                     for (const auto [transitionSymbol, nextState] : s->transitions)
                     {
@@ -319,6 +319,7 @@ namespace automat
             }
         }
 
+
         for (const auto& [oldSet, newSet] : newStates)
         {
             for (State* s : oldSet)
@@ -329,12 +330,11 @@ namespace automat
                 }
             }
         }
-        //minDFA.start = newStates[{dfa.start}];
+
         visualizer::exportToDot(minDFA.start, nullptr, "MinDFA");
         return minDFA;
 
     }
-
 
 
 

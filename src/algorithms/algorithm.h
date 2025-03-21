@@ -3,6 +3,7 @@
 #include "../automat/DFA/DFA.h"
 namespace automat {
 
+
     class algForAuto {
       public:
         algForAuto() = default;

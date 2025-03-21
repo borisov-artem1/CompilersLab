@@ -12,7 +12,7 @@ namespace automat
     class visualizer {
     public:
         static void exportToDot(State* start, State* accept, const std::string& filename);
-        static void exportDFAToDot(const DFA& dfa, const std::string& filename);
+        //static void exportDFAToDot(const DFA& dfa, const std::string& filename);
     };
 }
 
