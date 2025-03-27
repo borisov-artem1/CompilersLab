@@ -13,6 +13,7 @@ namespace automat
 {
     automat algForAuto::buildNFAfromPostfixString(std::string& baseString)
     {
+        // a|b -> ab|
         prep::preprocessing regSeq(baseString);
         std::string postfixString = regSeq.normalizeString();
         std::stack<automat> nfaStack;
@@ -44,7 +45,7 @@ namespace automat
                 nfaStack.push(nfa.baseAlternate(firstAutomat, secondAutomat, stateCounter));
             }
         }
-        visualizer::exportToDot(nfaStack.top().start, nfaStack.top().accept,"NFA");
+
         return nfaStack.top();
     }
 
@@ -115,7 +116,7 @@ namespace automat
             }
         }
 
-        visualizer::exportToDot(dfa.start, nullptr, "DFA");
+
         return dfa;
 
     }
@@ -332,7 +333,7 @@ namespace automat
             }
         }
 
-        visualizer::exportToDot(minDFA.start, nullptr, "MinDFA");
+
         return minDFA;
 
     }

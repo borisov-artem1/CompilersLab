@@ -16,6 +16,7 @@ namespace automat {
 		}
 	}
 
+
 	automat baseAutomat::createBaseAutomat(const char symbol, int& counter) {
 		if (symbol == '\0' || std::iscntrl(symbol))
 		{

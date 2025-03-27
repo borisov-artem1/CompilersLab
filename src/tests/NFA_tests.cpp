@@ -2,6 +2,7 @@
 #include "../automat/NFA/NFA.h"
 #include "../algorithms/algorithm.h"
 #include "../prep/preprocessing.h"
+#include "../visualization/visualizer.h"
 
 
 TEST(NFABuildTest, BuildPlusRegex) {
@@ -14,6 +15,9 @@ TEST(NFABuildTest, BuildPlusRegex) {
     automat::DFA dfa = automat::algForAuto::buildDFAfromNFA(nfa);
     automat::DFA minDfa = automat::algForAuto::minimizationDFA(dfa, regex);
     automat::DFA dfaFromRGX = automat::DFABuilder::buildMinimalDFA(regex);
+    automat::visualizer::exportToDot(nfa.start, nfa.accept,"NFA");
+    automat::visualizer::exportToDot(dfa.start, nullptr, "DFA");
+    automat::visualizer::exportToDot(minDfa.start, nullptr, "MinDFA");
     EXPECT_FALSE(graph.acceptString(nfa, ""));
     EXPECT_TRUE(graph.acceptString(nfa, "a"));
     EXPECT_TRUE(graph.acceptString(nfa, "aa"));
@@ -64,6 +68,9 @@ TEST(NFABuildTest, BuildKleeneRegex)
     automat::DFA dfa = automat::algForAuto::buildDFAfromNFA(nfa);
     automat::DFA minDfa = automat::algForAuto::minimizationDFA(dfa, regex);
     automat::DFA dfaFromRGX = automat::DFABuilder::buildMinimalDFA(regex);
+    automat::visualizer::exportToDot(nfa.start, nfa.accept,"NFA");
+    automat::visualizer::exportToDot(dfa.start, nullptr, "DFA");
+    automat::visualizer::exportToDot(minDfa.start, nullptr, "MinDFA");
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "a"));
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "aa"));
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "aaa"));
@@ -107,6 +114,9 @@ TEST(NFABuildTest, BuildConcatRegex)
     automat::DFA dfa = automat::algForAuto::buildDFAfromNFA(nfa);
     automat::DFA minDfa = automat::algForAuto::minimizationDFA(dfa, regex);
     automat::DFA dfaFromRGX = automat::DFABuilder::buildMinimalDFA(regex);
+    automat::visualizer::exportToDot(nfa.start, nfa.accept,"NFA");
+    automat::visualizer::exportToDot(dfa.start, nullptr, "DFA");
+    automat::visualizer::exportToDot(minDfa.start, nullptr, "MinDFA");
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "ab"));
     EXPECT_FALSE(automat::algForAuto::acceptStringForDFA(dfa.start, "b"));
     EXPECT_FALSE(automat::algForAuto::acceptStringForDFA(dfa.start, "ba"));
@@ -141,6 +151,9 @@ TEST(NFABuildTest, BuildAlternateRegex) {
     automat::DFA dfa = automat::algForAuto::buildDFAfromNFA(nfa);
     automat::DFA minDfa = automat::algForAuto::minimizationDFA(dfa, regex);
     automat::DFA dfaFromRGX = automat::DFABuilder::buildMinimalDFA(regex);
+    automat::visualizer::exportToDot(nfa.start, nfa.accept,"NFA");
+    automat::visualizer::exportToDot(dfa.start, nullptr, "DFA");
+    automat::visualizer::exportToDot(minDfa.start, nullptr, "MinDFA");
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "a"));
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "b"));
     EXPECT_FALSE(automat::algForAuto::acceptStringForDFA(dfa.start, "ab"));
@@ -171,6 +184,9 @@ TEST(NFABuildTest, ComplexNFA_1)
         automat::DFA dfa = automat::algForAuto::buildDFAfromNFA(nfa);
         automat::DFA minDfa = automat::algForAuto::minimizationDFA(dfa, regex);
         automat::DFA dfaFromRGX = automat::DFABuilder::buildMinimalDFA(regex);
+        automat::visualizer::exportToDot(nfa.start, nfa.accept,"NFA");
+        automat::visualizer::exportToDot(dfa.start, nullptr, "DFA");
+        automat::visualizer::exportToDot(minDfa.start, nullptr, "MinDFA");
         nfa.clearAuto();
         });
 }
@@ -195,6 +211,9 @@ TEST(NFABuildTest, BuildComplexKleeneRegex) {
     automat::DFA dfa = automat::algForAuto::buildDFAfromNFA(nfa);
     automat::DFA minDfa = automat::algForAuto::minimizationDFA(dfa, regex);
     automat::DFA dfaFromRGX = automat::DFABuilder::buildMinimalDFA(regex);
+    automat::visualizer::exportToDot(nfa.start, nfa.accept,"NFA");
+    automat::visualizer::exportToDot(dfa.start, nullptr, "DFA");
+    automat::visualizer::exportToDot(minDfa.start, nullptr, "MinDFA");
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "ad"));
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "bd"));
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "cd"));
@@ -286,6 +305,9 @@ TEST(NFABuildTest, BuildComplexRegex_1) {
     automat::DFA dfa = automat::algForAuto::buildDFAfromNFA(nfa);
     automat::DFA minDfa = automat::algForAuto::minimizationDFA(dfa, regex);
     automat::DFA dfaFromRGX = automat::DFABuilder::buildMinimalDFA(regex);
+    automat::visualizer::exportToDot(nfa.start, nfa.accept,"NFA");
+    automat::visualizer::exportToDot(dfa.start, nullptr, "DFA");
+    automat::visualizer::exportToDot(minDfa.start, nullptr, "MinDFA");
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "babb"));
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "bbbabb"));
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "abb"));
@@ -330,6 +352,9 @@ TEST(NFABuildTest, BuildComplexRegex_2) {
     automat::DFA dfa = automat::algForAuto::buildDFAfromNFA(nfa);
     automat::DFA minDfa = automat::algForAuto::minimizationDFA(dfa, regex);
     automat::DFA dfaFromRGX = automat::DFABuilder::buildMinimalDFA(regex);
+    automat::visualizer::exportToDot(nfa.start, nfa.accept,"NFA");
+    automat::visualizer::exportToDot(dfa.start, nullptr, "DFA");
+    automat::visualizer::exportToDot(minDfa.start, nullptr, "MinDFA");
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "vv"));
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "vvvv"));
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "aavv"));
@@ -352,6 +377,57 @@ TEST(NFABuildTest, BuildComplexRegex_2) {
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfaFromRGX.start, "bbbbvv"));
     EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfaFromRGX.start, "vvv"));
     EXPECT_FALSE(automat::algForAuto::acceptStringForDFA(dfaFromRGX.start, "ba"));
+    EXPECT_FALSE(automat::algForAuto::acceptStringForDFA(dfaFromRGX.start, ""));
+
+    nfa.clearAuto();
+}
+
+TEST(NFABuildTest, ComplexNFA_3)
+{
+    std::string regex = "(a|b)*abb";
+    automat::NFA graph;
+    automat::automat nfa;
+    EXPECT_NO_THROW({
+        nfa = automat::algForAuto::buildNFAfromPostfixString(regex);
+        });
+    EXPECT_TRUE(graph.acceptString(nfa, "aabb"));
+    EXPECT_FALSE(graph.acceptString(nfa, "bb"));
+    EXPECT_FALSE(graph.acceptString(nfa, ""));
+    EXPECT_TRUE(graph.acceptString(nfa, "abb"));
+    EXPECT_TRUE(graph.acceptString(nfa, "aabbabb"));
+    EXPECT_TRUE(graph.acceptString(nfa, "ababb"));
+    EXPECT_TRUE(graph.acceptString(nfa, "bbbbbabb"));
+    EXPECT_TRUE(graph.acceptString(nfa, "babb"));
+
+
+    automat::DFA dfa = automat::algForAuto::buildDFAfromNFA(nfa);
+    automat::DFA minDfa = automat::algForAuto::minimizationDFA(dfa, regex);
+    automat::DFA dfaFromRGX = automat::DFABuilder::buildMinimalDFA(regex);
+    automat::visualizer::exportToDot(nfa.start, nfa.accept,"NFA");
+    automat::visualizer::exportToDot(dfa.start, nullptr, "DFA");
+    automat::visualizer::exportToDot(minDfa.start, nullptr, "MinDFA");
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "aabb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "abb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "aabbabb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "ababb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfa.start, "bbbbbabb"));
+    EXPECT_FALSE(automat::algForAuto::acceptStringForDFA(dfa.start, "bb"));
+    EXPECT_FALSE(automat::algForAuto::acceptStringForDFA(dfa.start, ""));
+
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(minDfa.start, "aabb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(minDfa.start, "abb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(minDfa.start, "aabbabb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(minDfa.start, "ababb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(minDfa.start, "bbbbbabb"));
+    EXPECT_FALSE(automat::algForAuto::acceptStringForDFA(minDfa.start, "bb"));
+    EXPECT_FALSE(automat::algForAuto::acceptStringForDFA(minDfa.start, ""));
+
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfaFromRGX.start, "aabb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfaFromRGX.start, "abb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfaFromRGX.start, "aabbabb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfaFromRGX.start, "ababb"));
+    EXPECT_TRUE(automat::algForAuto::acceptStringForDFA(dfaFromRGX.start, "bbbbbabb"));
+    EXPECT_FALSE(automat::algForAuto::acceptStringForDFA(dfaFromRGX.start, "bb"));
     EXPECT_FALSE(automat::algForAuto::acceptStringForDFA(dfaFromRGX.start, ""));
 
     nfa.clearAuto();

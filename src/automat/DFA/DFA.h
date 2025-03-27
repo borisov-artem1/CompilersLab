@@ -19,8 +19,9 @@ namespace automat {
     public:
         void addState(State* s);
         [[nodiscard]] static DFA buildMinimalDFA(std::string& regex);
-        [[nodiscard]] static std::map<int, char> alCounter(const std::string& regex);
+        [[nodiscard]] static int alCounter(const std::string& regex);
         [[nodiscard]] static std::set<int> findEndingPositions(const std::string& postfix);
+        [[nodiscard]] static DFA buildDFA(const std::string& regex);
     };
 
 
